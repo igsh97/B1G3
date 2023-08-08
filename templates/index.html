@@ -63,6 +63,7 @@
 
             fetch('/signIn', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
                 alert(data['msg']);
+                window.location.href='http://localhost:5001/webstagram'
             });
             window.location.reload()
             
