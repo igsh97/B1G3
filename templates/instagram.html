@@ -26,15 +26,17 @@
             let name=$('#name').val()
             let mbti=$('#mbti').val()
             let hobby=$('#hobby').val()
-            let image=$('#image').val()
+            let profile=$('#profile').val()
+            let feed=$('#feed').val()
             let comment=$('#comment').val()
 
             let formData=new FormData();
             formData.append("name_give",name);
             formData.append("mbti_give",mbti);
             formData.append("hobby_give",hobby);
-            formData.append("image_give",image);
+            formData.append("profile_give",profile);
             formData.append("comment_give",comment);
+            formData.append("feed_give",feed);
 
             fetch('/profile', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
                 alert(data['msg']);
@@ -49,7 +51,8 @@
                 rows.forEach((a)=>{
                     let comment=a['comment']
                     let hobby=a['hobby']
-                    let image=a['image']
+                    let profile=a['profile']
+                    let feed=a['feed']
                     let mbti=a['mbti']
                     let name=a['name']
 
@@ -58,7 +61,7 @@
                                         <div class="feed_name">
                                             <div class="profile_box">
                                                 <img class="profile_img"
-                                                    src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
+                                                    src="${profile}">
                                             </div>
                                             <span class="feed_name_txt"> ${name} </span>
                                         </div>
@@ -67,7 +70,7 @@
                                             <div id="2" class="carousel slide" data-bs-ride="carousel">
                                                 <div class="carousel-inner">
                                                     <div class="carousel-item active">
-                                                        <img src="${image}"
+                                                        <img src="${feed}"
                                                             class="d-block w-100" alt="...">
                                                     </div>
                                                 </div>
@@ -79,33 +82,32 @@
                                                 <img style="height: 25px;width: 30px; object-fit: contain"
                                                     src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png">
                                                 <img style="height: 30px;width: 30px; object-fit: contain"
-                                                    src="https://cdn-icons.flaticon.com/png/128/1947/premium/1947247.png?token=exp=1651424572~hmac=e29e759a44d2395d14bfe8221103f6ef">
+                                                    src="https://cdn-icons-png.flaticon.com/128/1947/1947247.png">
                                                 <img style="height: 25px;width: 30px; object-fit: contain"
-                                                    src="https://cdn-icons.flaticon.com/png/128/5662/premium/5662990.png?token=exp=1651424572~hmac=13359bd02fb21b47dbc2aa28606f8e9a">
+                                                    src="https://cdn-icons-png.flaticon.com/128/25/25667.png">
                                             </div>
 
                                             <div>
                                                 <!--여기에 아이콘추가!-->
                                                 <img style="height: 25px;width: 30px; object-fit: contain"
-                                                    src="https://cdn-icons.flaticon.com/png/128/2099/premium/2099085.png?token=exp=1651424232~hmac=e1234d13efc729d88e61fc07be70aa6c">
+                                                    src="https://cdn-icons-png.flaticon.com/128/3161/3161837.png">
 
                                             </div>
                                         </div>
                                         <div class="feed_like">
-                                            <p class="feed_txt"><b>${mbti}</b></p>
+                                            <p class="feed_txt"><b>${comment}</b></p>
                                         </div>
                                         <div class="feed_content">
-                                            <p class="feed_txt"><b> 취미:${hobby} </b> ${comment} </p>
+                                            <p class="feed_txt"><b> 취미는 ${hobby} </b></p>
                                         </div>
-                                        <div class="feed_reply">
-                                            <span class="feed_txt"> <b> dqwqwqo </b> 사진굿ㅎㅎㅎ! </span>
-                                            <span class="feed_txt"> <b> regrg </b> 멋져요! 최고에요! </span>
-                                        </div><!--        댓글창-->
+                                        <div class="feed_content">
+                                            <p class="feed_txt"><b>${mbti}</b></p>
+                                        </div>
                                         <div style="display: flex; border-top: 1px solid #dee2e6; padding: 5px;">
                                             <!--            아이콘추가-->
                                             <div>
                                                 <img style="height: 25px;width: 30px; object-fit: contain"
-                                                    src="https://cdn-icons.flaticon.com/png/128/3404/premium/3404134.png?token=exp=1651427742~hmac=65e9a80420defefea80ceb332e57dceb">
+                                                    src="https://cdn-icons-png.flaticon.com/128/4249/4249907.png">
                                             </div>
                                             <div style="display: flex;justify-content: space-between;width: 560px">
                                                 <div>
@@ -336,15 +338,15 @@
                 <img style="height: 30px;width: 30px; object-fit: contain"
                     src="https://cdn-icons-png.flaticon.com/128/20/20176.png">
                 <img style="height: 30px;width: 30px; object-fit: contain"
-                    src="https://cdn-icons.flaticon.com/png/128/2099/premium/2099085.png?token=exp=1651424232~hmac=e1234d13efc729d88e61fc07be70aa6c">
+                    src="https://cdn-icons-png.flaticon.com/128/2983/2983788.png">
                 <img style="height: 30px;width: 30px; object-fit: contain"
                     src="https://cdn-icons-png.flaticon.com/128/875/875068.png">
                 <img style="height: 30px;width: 30px; object-fit: contain"
-                    src="https://cdn-icons.flaticon.com/png/128/3757/premium/3757685.png?token=exp=1651424517~hmac=9f14f07e4be606116743e3e298aef11b">
+                    src="https://cdn-icons-png.flaticon.com/128/2088/2088617.png">
                 <img style="height: 30px;width: 30px; object-fit: contain"
                     src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png">
                 <img style="height: 30px;width: 30px; object-fit: contain"
-                    src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
+                    src="https://cdn140.picsart.com/302067897054211.png">
             </div>
         </div>
     </nav>
@@ -367,8 +369,12 @@
                     <label>취미</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input id="image" type="email" class="form-control" placeholder="name@example.com">
-                    <label>사진url을 올려주세요</label>
+                    <input id="profile" type="email" class="form-control" placeholder="name@example.com">
+                    <label>프로필 사진url을 올려주세요</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input id="feed" type="email" class="form-control" placeholder="name@example.com">
+                    <label>게시물url을 올려주세요</label>
                 </div>
                 <div class="form-floating">
                     <textarea id="comment" class="form-control" placeholder="Leave a comment here"></textarea>
@@ -677,19 +683,8 @@
         <div class="right_body">
             <div class="feed_name" style="justify-content: space-between">
                 <div style="display: flex; align-items: center; ">
-                    <div class="big_profile_box">
-                        <img class="profile_img"
-                            src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
-                    </div>
-                    <div class="name_content">
-                        <span class="feed_name_txt"> shkim1117 </span>
-                        <span class="name_content_txt"> 김성호</span>
-                    </div>
+    
                 </div>
-
-                <a class="link_txt">
-                    전환
-                </a>
             </div>
 
             <div class="recommend_box">
