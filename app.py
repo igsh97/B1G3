@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 app = Flask(__name__)
 from pymongo import MongoClient
+import certifi
 
-client = MongoClient('mongodb+srv://sparta:test@cluster0.hthtfgb.mongodb.net/?retryWrites=true&w=majority')
+ca = certifi.where()
+
+client = MongoClient('mongodb+srv://sparta:test@cluster0.eh7wfh6.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.dbsparta
-
 @app.route('/')
 def home():
    return render_template('index.html')
@@ -38,7 +40,7 @@ def sign_in():
 
    if(id and pwd):
       print("success")
-      redirect(url_for('webstagram'))
+      #redirect(url_for('webstagram'))
       return jsonify({'msg':'로그인 성공!'})
    #다른 페이지로 redirect
       
@@ -51,14 +53,16 @@ def profile_post():
    name_receive=request.form['name_give']
    mbti_receive=request.form['mbti_give']
    hobby_receive=request.form['hobby_give']
-   image_receive=request.form['image_give']
+   profile_receive=request.form['profile_give']
+   feed_receive=request.form['feed_give']
    comment_receive=request.form['comment_give']
 
    doc = {
       'name':name_receive,
       'mbti':mbti_receive,
       'hobby':hobby_receive,
-      'image':image_receive,
+      'profile':profile_receive,
+      'feed':feed_receive,
       'comment':comment_receive
    }
    db.profiles.insert_one(doc)
