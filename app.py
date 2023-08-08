@@ -1,11 +1,8 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 app = Flask(__name__)
 from pymongo import MongoClient
-import certifi
 
-ca = certifi.where()
-
-client = MongoClient('mongodb+srv://sparta:test@cluster0.eh7wfh6.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=ca)
+client = MongoClient('mongodb+srv://sparta:test@cluster0.hthtfgb.mongodb.net/?retryWrites=true&w=majority')
 db = client.dbsparta
 
 @app.route('/')
@@ -24,7 +21,7 @@ def sign_up():
    doc = {
         'id':id_receive,
         'pwd':pwd_receive
-    }
+   }
    db.user.insert_one(doc)
     
    return jsonify({'msg': '저장 완료!'})
@@ -49,7 +46,29 @@ def sign_in():
       print("fail")
       return jsonify({'msg':'사용자를 찾지 못했습니다. 회원가입을 진행해주세요.'})
 
+@app.route('/profile', methods=["POST"])
+def profile_post():
+   name_receive=request.form['name_give']
+   mbti_receive=request.form['mbti_give']
+   hobby_receive=request.form['hobby_give']
+   image_receive=request.form['image_give']
+   comment_receive=request.form['comment_give']
 
+   doc = {
+      'name':name_receive,
+      'mbti':mbti_receive,
+      'hobby':hobby_receive,
+      'image':image_receive,
+      'comment':comment_receive
+   }
+   db.profiles.insert_one(doc)
+
+   return jsonify({'msg':'Profile 등록 완료!'})
+
+@app.route('/profile', methods=["GET"])
+def profile_get():
+   all_profiles = list(db.profiles.find({},{'_id':False}))
+   return jsonify({'result':all_profiles})
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5001, debug=True)
