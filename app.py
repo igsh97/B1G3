@@ -1,11 +1,8 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 app = Flask(__name__)
 from pymongo import MongoClient
-import certifi
 
-ca = certifi.where()
-
-client = MongoClient('mongodb+srv://sparta:test@cluster0.eh7wfh6.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=ca)
+client = MongoClient('mongodb+srv://sparta:test@cluster0.hthtfgb.mongodb.net/?retryWrites=true&w=majority')
 db = client.dbsparta
 @app.route('/')
 def home():
