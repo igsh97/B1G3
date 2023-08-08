@@ -48,6 +48,7 @@
             fetch('/profile').then((res) => res.json()).then((data) => {
                 let rows=data['result']
                 $('#feed-boxes').empty()
+                $('#recommends').empty()
                 rows.forEach((a)=>{
                     let comment=a['comment']
                     let hobby=a['hobby']
@@ -55,6 +56,21 @@
                     let feed=a['feed']
                     let mbti=a['mbti']
                     let name=a['name']
+
+                    let pro_html=`<div class="feed_name" style="justify-content: space-between">
+                                        <div class="profile_box">
+                                            <img class="profile_img"
+                                                src="${profile}">
+                                        </div>
+                                        <div class="name_content">
+                                            <span class="feed_name_txt"> ${name} </span>
+                                            <span class="name_content_txt"> hkj님 외 3명이 팔로우합니...</span>
+                                        </div>
+                                        <a class="link_txt">
+                                            팔로우
+                                        </a>
+                                    </div>`
+                    $('#recommends').append(pro_html)
 
                     let temp_html=`<div class="border feed_box">
                                         <!-- 피드이름-->
@@ -159,12 +175,21 @@
         right: 60px;
 
     }
-
+    @media (max-width: 1280px) {
+        .right_body {
+            display: none; /* Hide the right column when screen width is below 660px */
+        }
+    }
+    /* 문제 부분 */
     .left_body {
         position: relative;
-        left: 600px;
-        width: 600px;
-        height: 100%;
+        left: 0; /* Reset the left position */
+        width: 600px; /* Fixed width */
+        padding: 0 0px; /* Add smaller padding for spacing */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center the content horizontally */
+        margin: 0 auto; /* Center the element horizontally */
     }
 
 
@@ -386,6 +411,7 @@
                 </div>
             <!-- 게시물 -->
             </div>
+            <!-- 고정된 부분 -->
             <div class="feeds" id="feed-boxes">
                 <div class="border feed_box">
                     <!-- 피드이름-->
@@ -688,10 +714,10 @@
             </div>
 
             <div class="recommend_box">
-                <span style="color: gray"> 회원님을 위한 추천</span>
+                <span style="color: gray"> 프로필이 있는 사람</span>
                 <span style="font-size: 12px"> 모두 보기 </span>
             </div>
-            <div>
+            <div class="recommend" id="recommends">
                 <div class="feed_name" style="justify-content: space-between">
                     <div class="profile_box">
                         <img class="profile_img"
