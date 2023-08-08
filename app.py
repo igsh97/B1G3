@@ -7,6 +7,7 @@ ca = certifi.where()
 
 client = MongoClient('mongodb+srv://sparta:test@cluster0.eh7wfh6.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.dbsparta
+
 @app.route('/')
 def home():
    return render_template('index.html')
@@ -72,6 +73,7 @@ def profile_post():
 @app.route('/profile', methods=["GET"])
 def profile_get():
    all_profiles = list(db.profiles.find({},{'_id':False}))
+   my_id = list(db.user.find({},{'_id':False}))
    return jsonify({'result':all_profiles})
 
 if __name__ == '__main__':

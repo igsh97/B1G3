@@ -62,7 +62,13 @@
             formData.append("pwd_log", input_pwd);
 
             fetch('/signIn', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
-                window.location.href='http://localhost:5001/webstagram'
+                if(data['msg']=="로그인 성공!"){
+                    window.location.href='http://localhost:5001/webstagram'
+                }
+                else{
+                    window.location.reload()
+                }
+                    
                 alert(data['msg']);
                 
             });
