@@ -17,6 +17,112 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            listing();
+        });
+
+        function posting(){
+            let name=$('#name').val()
+            let mbti=$('#mbti').val()
+            let hobby=$('#hobby').val()
+            let image=$('#image').val()
+            let comment=$('#comment').val()
+
+            let formData=new FormData();
+            formData.append("name_give",name);
+            formData.append("mbti_give",mbti);
+            formData.append("hobby_give",hobby);
+            formData.append("image_give",image);
+            formData.append("comment_give",comment);
+
+            fetch('/profile', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+                alert(data['msg']);
+            });
+            window.location.reload();
+        }
+
+        function listing(){
+            fetch('/profile').then((res) => res.json()).then((data) => {
+                let rows=data['result']
+                $('#feed-boxes').empty()
+                rows.forEach((a)=>{
+                    let comment=a['comment']
+                    let hobby=a['hobby']
+                    let image=a['image']
+                    let mbti=a['mbti']
+                    let name=a['name']
+
+                    let temp_html=`<div class="border feed_box">
+                                        <!-- 피드이름-->
+                                        <div class="feed_name">
+                                            <div class="profile_box">
+                                                <img class="profile_img"
+                                                    src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
+                                            </div>
+                                            <span class="feed_name_txt"> ${name} </span>
+                                        </div>
+
+                                        <div class="feed_img">
+                                            <div id="2" class="carousel slide" data-bs-ride="carousel">
+                                                <div class="carousel-inner">
+                                                    <div class="carousel-item active">
+                                                        <img src="${image}"
+                                                            class="d-block w-100" alt="...">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="feed_icon">
+                                            <div>
+                                                <img style="height: 25px;width: 30px; object-fit: contain"
+                                                    src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png">
+                                                <img style="height: 30px;width: 30px; object-fit: contain"
+                                                    src="https://cdn-icons.flaticon.com/png/128/1947/premium/1947247.png?token=exp=1651424572~hmac=e29e759a44d2395d14bfe8221103f6ef">
+                                                <img style="height: 25px;width: 30px; object-fit: contain"
+                                                    src="https://cdn-icons.flaticon.com/png/128/5662/premium/5662990.png?token=exp=1651424572~hmac=13359bd02fb21b47dbc2aa28606f8e9a">
+                                            </div>
+
+                                            <div>
+                                                <!--여기에 아이콘추가!-->
+                                                <img style="height: 25px;width: 30px; object-fit: contain"
+                                                    src="https://cdn-icons.flaticon.com/png/128/2099/premium/2099085.png?token=exp=1651424232~hmac=e1234d13efc729d88e61fc07be70aa6c">
+
+                                            </div>
+                                        </div>
+                                        <div class="feed_like">
+                                            <p class="feed_txt"><b>${mbti}</b></p>
+                                        </div>
+                                        <div class="feed_content">
+                                            <p class="feed_txt"><b> 취미:${hobby} </b> ${comment} </p>
+                                        </div>
+                                        <div class="feed_reply">
+                                            <span class="feed_txt"> <b> dqwqwqo </b> 사진굿ㅎㅎㅎ! </span>
+                                            <span class="feed_txt"> <b> regrg </b> 멋져요! 최고에요! </span>
+                                        </div><!--        댓글창-->
+                                        <div style="display: flex; border-top: 1px solid #dee2e6; padding: 5px;">
+                                            <!--            아이콘추가-->
+                                            <div>
+                                                <img style="height: 25px;width: 30px; object-fit: contain"
+                                                    src="https://cdn-icons.flaticon.com/png/128/3404/premium/3404134.png?token=exp=1651427742~hmac=65e9a80420defefea80ceb332e57dceb">
+                                            </div>
+                                            <div style="display: flex;justify-content: space-between;width: 560px">
+                                                <div>
+                                                    <span>댓글달기...</span>
+                                                </div>
+                                                <div>
+                                                    <span style="color: blue">게시</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`
+                    $('#feed-boxes').append(temp_html)
+
+                })
+            })
+        }
+    </script>
 
     <!-- 구글폰트 -->
     <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
@@ -274,223 +380,224 @@
                 </div>
             <!-- 게시물 -->
             </div>
-            <div class="border feed_box">
-                <!-- 피드이름-->
-                <div class="feed_name">
-                    <div class="profile_box">
-                        <img class="profile_img"
-                            src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
+            <div class="feeds" id="feed-boxes">
+                <div class="border feed_box">
+                    <!-- 피드이름-->
+                    <div class="feed_name">
+                        <div class="profile_box">
+                            <img class="profile_img"
+                                src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
+                        </div>
+                        <span class="feed_name_txt"> shkim1117 </span>
                     </div>
-                    <span class="feed_name_txt"> shkim1117 </span>
-                </div>
 
-                <div class="feed_img">
-                    <div id="2" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://blog.kakaocdn.net/dn/cASqaj/btqBilCJyxx/mmKcxCUG7Q44J1ufKjE6k1/img.jpg"
-                                    class="d-block w-100" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="http://www.artinsight.co.kr/data/tmp/1702/3a2abdb7c68e721dfc7e8bc6390dc0a2_U1bAgolCdrIYcFx8eGbRdIhk.png"
-                                    class="d-block w-100" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJCMW3zIs4PBTdLLkM0SofRYb1tziztdotGUTQlYlfcceMtCNSQm2KVwfmA4b2iOyvAcs&usqp=CAU"
-                                    class="d-block w-100" alt="...">
+                    <div class="feed_img">
+                        <div id="2" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://blog.kakaocdn.net/dn/cASqaj/btqBilCJyxx/mmKcxCUG7Q44J1ufKjE6k1/img.jpg"
+                                        class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="http://www.artinsight.co.kr/data/tmp/1702/3a2abdb7c68e721dfc7e8bc6390dc0a2_U1bAgolCdrIYcFx8eGbRdIhk.png"
+                                        class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJCMW3zIs4PBTdLLkM0SofRYb1tziztdotGUTQlYlfcceMtCNSQm2KVwfmA4b2iOyvAcs&usqp=CAU"
+                                        class="d-block w-100" alt="...">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="feed_icon">
-                    <div>
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png">
-                        <img style="height: 30px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/1947/premium/1947247.png?token=exp=1651424572~hmac=e29e759a44d2395d14bfe8221103f6ef">
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/5662/premium/5662990.png?token=exp=1651424572~hmac=13359bd02fb21b47dbc2aa28606f8e9a">
-                    </div>
-
-                    <div>
-                        <!--여기에 아이콘추가!-->
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/2099/premium/2099085.png?token=exp=1651424232~hmac=e1234d13efc729d88e61fc07be70aa6c">
-
-                    </div>
-                </div>
-                <div class="feed_like">
-                    <p class="feed_txt"><b>좋아요 34개</b></p>
-                </div>
-                <div class="feed_content">
-                    <p class="feed_txt"><b> shkim1117 </b> I want to go to egypt </p>
-                </div>
-                <div class="feed_reply">
-                    <span class="feed_txt"> <b> dqwqwqo </b> 사진굿ㅎㅎㅎ! </span>
-                    <span class="feed_txt"> <b> regrg </b> 멋져요! 최고에요! </span>
-                </div><!--        댓글창-->
-                <div style="display: flex; border-top: 1px solid #dee2e6; padding: 5px;">
-                    <!--            아이콘추가-->
-                    <div>
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/3404/premium/3404134.png?token=exp=1651427742~hmac=65e9a80420defefea80ceb332e57dceb">
-                    </div>
-                    <div style="display: flex;justify-content: space-between;width: 560px">
+                    <div class="feed_icon">
                         <div>
-                            <span>댓글달기...</span>
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png">
+                            <img style="height: 30px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/1947/premium/1947247.png?token=exp=1651424572~hmac=e29e759a44d2395d14bfe8221103f6ef">
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/5662/premium/5662990.png?token=exp=1651424572~hmac=13359bd02fb21b47dbc2aa28606f8e9a">
                         </div>
+
                         <div>
-                            <span style="color: blue">게시</span>
+                            <!--여기에 아이콘추가!-->
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/2099/premium/2099085.png?token=exp=1651424232~hmac=e1234d13efc729d88e61fc07be70aa6c">
+
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="border feed_box">
-                <!-- 피드이름-->
-                <div class="feed_name">
-                    <div class="profile_box">
-                        <img class="profile_img"
-                            src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
+                    <div class="feed_like">
+                        <p class="feed_txt"><b>좋아요 34개</b></p>
                     </div>
-                    <span class="feed_name_txt"> shkim1117 </span>
-                </div>
-
-                <div class="feed_img">
-                    <div id="3" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://blog.kakaocdn.net/dn/cASqaj/btqBilCJyxx/mmKcxCUG7Q44J1ufKjE6k1/img.jpg"
-                                    class="d-block w-100" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="http://www.artinsight.co.kr/data/tmp/1702/3a2abdb7c68e721dfc7e8bc6390dc0a2_U1bAgolCdrIYcFx8eGbRdIhk.png"
-                                    class="d-block w-100" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJCMW3zIs4PBTdLLkM0SofRYb1tziztdotGUTQlYlfcceMtCNSQm2KVwfmA4b2iOyvAcs&usqp=CAU"
-                                    class="d-block w-100" alt="...">
-                            </div>
-                        </div>
+                    <div class="feed_content">
+                        <p class="feed_txt"><b> shkim1117 </b> I want to go to egypt </p>
                     </div>
-                </div>
-
-                <div class="feed_icon">
-                    <div>
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png">
-                        <img style="height: 30px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/1947/premium/1947247.png?token=exp=1651424572~hmac=e29e759a44d2395d14bfe8221103f6ef">
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/5662/premium/5662990.png?token=exp=1651424572~hmac=13359bd02fb21b47dbc2aa28606f8e9a">
-                    </div>
-
-                    <div>
-                        <!--여기에 아이콘추가!-->
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/2099/premium/2099085.png?token=exp=1651424232~hmac=e1234d13efc729d88e61fc07be70aa6c">
-
-                    </div>
-                </div>
-                <div class="feed_like">
-                    <p class="feed_txt"><b>좋아요 34개</b></p>
-                </div>
-                <div class="feed_content">
-                    <p class="feed_txt"><b> shkim1117 </b> I want to go to egypt </p>
-                </div>
-                <div class="feed_reply">
-                    <span class="feed_txt"> <b> dqwqwqo </b> 사진굿ㅎㅎㅎ! </span>
-                    <span class="feed_txt"> <b> regrg </b> 멋져요! 최고에요! </span>
-                </div><!--        댓글창-->
-                <div style="display: flex; border-top: 1px solid #dee2e6; padding: 5px;">
-                    <!--            아이콘추가-->
-                    <div>
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/3404/premium/3404134.png?token=exp=1651427742~hmac=65e9a80420defefea80ceb332e57dceb">
-                    </div>
-                    <div style="display: flex;justify-content: space-between;width: 560px">
+                    <div class="feed_reply">
+                        <span class="feed_txt"> <b> dqwqwqo </b> 사진굿ㅎㅎㅎ! </span>
+                        <span class="feed_txt"> <b> regrg </b> 멋져요! 최고에요! </span>
+                    </div><!--        댓글창-->
+                    <div style="display: flex; border-top: 1px solid #dee2e6; padding: 5px;">
+                        <!--            아이콘추가-->
                         <div>
-                            <span>댓글달기...</span>
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/3404/premium/3404134.png?token=exp=1651427742~hmac=65e9a80420defefea80ceb332e57dceb">
                         </div>
-                        <div>
-                            <span style="color: blue">게시</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="border feed_box">
-                <!-- 피드이름-->
-                <div class="feed_name">
-                    <div class="profile_box">
-                        <img class="profile_img"
-                            src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
-                    </div>
-                    <span class="feed_name_txt"> shkim1117 </span>
-                </div>
-
-                <div class="feed_img">
-                    <div id="4" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://blog.kakaocdn.net/dn/cASqaj/btqBilCJyxx/mmKcxCUG7Q44J1ufKjE6k1/img.jpg"
-                                    class="d-block w-100" alt="...">
+                        <div style="display: flex;justify-content: space-between;width: 560px">
+                            <div>
+                                <span>댓글달기...</span>
                             </div>
-                            <div class="carousel-item">
-                                <img src="http://www.artinsight.co.kr/data/tmp/1702/3a2abdb7c68e721dfc7e8bc6390dc0a2_U1bAgolCdrIYcFx8eGbRdIhk.png"
-                                    class="d-block w-100" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJCMW3zIs4PBTdLLkM0SofRYb1tziztdotGUTQlYlfcceMtCNSQm2KVwfmA4b2iOyvAcs&usqp=CAU"
-                                    class="d-block w-100" alt="...">
+                            <div>
+                                <span style="color: blue">게시</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="feed_icon">
-                    <div>
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png">
-                        <img style="height: 30px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/1947/premium/1947247.png?token=exp=1651424572~hmac=e29e759a44d2395d14bfe8221103f6ef">
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/5662/premium/5662990.png?token=exp=1651424572~hmac=13359bd02fb21b47dbc2aa28606f8e9a">
-                    </div>
-
-                    <div>
-                        <!--여기에 아이콘추가!-->
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/2099/premium/2099085.png?token=exp=1651424232~hmac=e1234d13efc729d88e61fc07be70aa6c">
-
-                    </div>
-                </div>
-                <div class="feed_like">
-                    <p class="feed_txt"><b>좋아요 34개</b></p>
-                </div>
-                <div class="feed_content">
-                    <p class="feed_txt"><b> shkim1117 </b> I want to go to egypt </p>
-                </div>
-                <div class="feed_reply">
-                    <span class="feed_txt"> <b> dqwqwqo </b> 사진굿ㅎㅎㅎ! </span>
-                    <span class="feed_txt"> <b> regrg </b> 멋져요! 최고에요! </span>
-                </div><!--        댓글창-->
-                <div style="display: flex; border-top: 1px solid #dee2e6; padding: 5px;">
-                    <!--            아이콘추가-->
-                    <div>
-                        <img style="height: 25px;width: 30px; object-fit: contain"
-                            src="https://cdn-icons.flaticon.com/png/128/3404/premium/3404134.png?token=exp=1651427742~hmac=65e9a80420defefea80ceb332e57dceb">
-                    </div>
-                    <div style="display: flex;justify-content: space-between;width: 560px">
-                        <div>
-                            <span>댓글달기...</span>
+                <div class="border feed_box">
+                    <!-- 피드이름-->
+                    <div class="feed_name">
+                        <div class="profile_box">
+                            <img class="profile_img"
+                                src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
                         </div>
-                        <div>
-                            <span style="color: blue">게시</span>
+                        <span class="feed_name_txt"> shkim1117 </span>
+                    </div>
+
+                    <div class="feed_img">
+                        <div id="3" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://blog.kakaocdn.net/dn/cASqaj/btqBilCJyxx/mmKcxCUG7Q44J1ufKjE6k1/img.jpg"
+                                        class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="http://www.artinsight.co.kr/data/tmp/1702/3a2abdb7c68e721dfc7e8bc6390dc0a2_U1bAgolCdrIYcFx8eGbRdIhk.png"
+                                        class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJCMW3zIs4PBTdLLkM0SofRYb1tziztdotGUTQlYlfcceMtCNSQm2KVwfmA4b2iOyvAcs&usqp=CAU"
+                                        class="d-block w-100" alt="...">
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="feed_icon">
+                        <div>
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png">
+                            <img style="height: 30px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/1947/premium/1947247.png?token=exp=1651424572~hmac=e29e759a44d2395d14bfe8221103f6ef">
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/5662/premium/5662990.png?token=exp=1651424572~hmac=13359bd02fb21b47dbc2aa28606f8e9a">
+                        </div>
+
+                        <div>
+                            <!--여기에 아이콘추가!-->
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/2099/premium/2099085.png?token=exp=1651424232~hmac=e1234d13efc729d88e61fc07be70aa6c">
+
+                        </div>
+                    </div>
+                    <div class="feed_like">
+                        <p class="feed_txt"><b>좋아요 34개</b></p>
+                    </div>
+                    <div class="feed_content">
+                        <p class="feed_txt"><b> shkim1117 </b> I want to go to egypt </p>
+                    </div>
+                    <div class="feed_reply">
+                        <span class="feed_txt"> <b> dqwqwqo </b> 사진굿ㅎㅎㅎ! </span>
+                        <span class="feed_txt"> <b> regrg </b> 멋져요! 최고에요! </span>
+                    </div><!--        댓글창-->
+                    <div style="display: flex; border-top: 1px solid #dee2e6; padding: 5px;">
+                        <!--            아이콘추가-->
+                        <div>
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/3404/premium/3404134.png?token=exp=1651427742~hmac=65e9a80420defefea80ceb332e57dceb">
+                        </div>
+                        <div style="display: flex;justify-content: space-between;width: 560px">
+                            <div>
+                                <span>댓글달기...</span>
+                            </div>
+                            <div>
+                                <span style="color: blue">게시</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="border feed_box">
+                <div class="border feed_box">
+                    <!-- 피드이름-->
+                    <div class="feed_name">
+                        <div class="profile_box">
+                            <img class="profile_img"
+                                src="https://tse4.mm.bing.net/th?id=OIP.91bzLuGzxke-1ca3jGOHGQHaHa&pid=Api&P=0&w=197&h=197">
+                        </div>
+                        <span class="feed_name_txt"> shkim1117 </span>
+                    </div>
+
+                    <div class="feed_img">
+                        <div id="4" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://blog.kakaocdn.net/dn/cASqaj/btqBilCJyxx/mmKcxCUG7Q44J1ufKjE6k1/img.jpg"
+                                        class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="http://www.artinsight.co.kr/data/tmp/1702/3a2abdb7c68e721dfc7e8bc6390dc0a2_U1bAgolCdrIYcFx8eGbRdIhk.png"
+                                        class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJCMW3zIs4PBTdLLkM0SofRYb1tziztdotGUTQlYlfcceMtCNSQm2KVwfmA4b2iOyvAcs&usqp=CAU"
+                                        class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feed_icon">
+                        <div>
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png">
+                            <img style="height: 30px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/1947/premium/1947247.png?token=exp=1651424572~hmac=e29e759a44d2395d14bfe8221103f6ef">
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/5662/premium/5662990.png?token=exp=1651424572~hmac=13359bd02fb21b47dbc2aa28606f8e9a">
+                        </div>
+
+                        <div>
+                            <!--여기에 아이콘추가!-->
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/2099/premium/2099085.png?token=exp=1651424232~hmac=e1234d13efc729d88e61fc07be70aa6c">
+
+                        </div>
+                    </div>
+                    <div class="feed_like">
+                        <p class="feed_txt"><b>좋아요 34개</b></p>
+                    </div>
+                    <div class="feed_content">
+                        <p class="feed_txt"><b> shkim1117 </b> I want to go to egypt </p>
+                    </div>
+                    <div class="feed_reply">
+                        <span class="feed_txt"> <b> dqwqwqo </b> 사진굿ㅎㅎㅎ! </span>
+                        <span class="feed_txt"> <b> regrg </b> 멋져요! 최고에요! </span>
+                    </div><!--        댓글창-->
+                    <div style="display: flex; border-top: 1px solid #dee2e6; padding: 5px;">
+                        <!--            아이콘추가-->
+                        <div>
+                            <img style="height: 25px;width: 30px; object-fit: contain"
+                                src="https://cdn-icons.flaticon.com/png/128/3404/premium/3404134.png?token=exp=1651427742~hmac=65e9a80420defefea80ceb332e57dceb">
+                        </div>
+                        <div style="display: flex;justify-content: space-between;width: 560px">
+                            <div>
+                                <span>댓글달기...</span>
+                            </div>
+                            <div>
+                                <span style="color: blue">게시</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border feed_box">
                 <!-- 피드이름-->
                 <div class="feed_name">
                     <div class="profile_box">
@@ -561,6 +668,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
 
 
