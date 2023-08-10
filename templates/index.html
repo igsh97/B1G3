@@ -60,7 +60,7 @@
 
             formData.append("id_log", input_id);
             formData.append("pwd_log", input_pwd);
-
+            
             fetch('/signIn', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
                 if(data['msg']=="로그인 성공!"){
                     window.location.href='http://localhost:5001/webstagram'
@@ -72,7 +72,7 @@
                 alert(data['msg']);
                 
             });
-            window.location.reload()
+            //window.location.reload()
             
         }
 
@@ -94,12 +94,12 @@
 
         <!-- Sign In -->
         <div class="container__form container--signin">
-            <form action="#" class="form" id="form2">
+            <form class="form" id="form2">
                 <h2 class="form__title">Sign In</h2>
                 <input type="text" placeholder="User" class="input" id="inputID"/>
                 <input type="password" placeholder="Password" class="input" id="inputPW"/>
                 
-                <button onclick="sign_in()" class="btn">로그인</button>
+                <button onclick="sign_in()" class="btn" type="button">로그인</button>
             </form>
         </div>
 
