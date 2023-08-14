@@ -1,13 +1,65 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, after_this_request,redirect,url_for
 app = Flask(__name__)
 from pymongo import MongoClient
 
 client = MongoClient('mongodb+srv://sparta:test@cluster0.hthtfgb.mongodb.net/?retryWrites=true&w=majority')
 db = client.dbsparta
 
+# @app.after_request
+# def add_no_cache_header(response):
+#     print("No cache")
+#     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+#     response.headers['Pragma'] = 'no-cache'
+#     response.headers['Expires'] = '0'
+#     return response
+
 @app.route('/')
 def home():
    return render_template('index.html')
+
+@app.route('/hyelee')
+def hyelee():
+   return render_template('hyelee.html')
+
+@app.route("/comment", methods=["POST"])
+def guestbook_post():
+    name_receive = request.form['name_give']
+    comment_receive = request.form['comment_give']
+
+    doc = {
+        'name':name_receive,
+        'comment':comment_receive
+    }
+    db.hyelee.insert_one(doc)
+    
+    return jsonify({'msg': '저장 완료!'})
+
+@app.route("/comment", methods=["GET"])
+def guestbook_get():
+    all_fans = list(db.hyelee.find({},{'_id':False}))
+    return jsonify({'result': all_fans})
+
+@app.route("/delete", methods=["POST"])
+def guestbook_delete():
+    recieve_comment = request.form['give_comment']
+    print(recieve_comment)
+
+    db.hyelee.delete_one({'comment': recieve_comment})
+    return jsonify({'msg': '삭제 완료'})
+
+@app.route("/rewrite", methods=["POST"])
+def guestbook_rewrite():
+    recieve_comment = request.form.get('re_comment',False)
+    print("recieve_comment :%s"%recieve_comment)
+
+    if(recieve_comment==False):
+       return jsonify({'msg':'값을 입력하십시오'})
+    
+    rewrite_comment = request.form.get('comment_rewrite',False)
+    print("rewrite_comment :%s"%rewrite_comment)
+
+    db.hyelee.update_one({'comment':recieve_comment},{'$set':{'comment':rewrite_comment}})
+    return jsonify({'msg': '업데이트 완료'})
 
 @app.route('/webstagram')
 def webstagram():
@@ -27,18 +79,23 @@ def sign_up():
    return jsonify({'msg': '저장 완료!'})
 
 
-@app.route('/signIn', methods=["POST"])
+@app.route('/signIn', methods=["GET","POST"])
 def sign_in():
-   id_log = request.form['id_log']
-   pwd_log = request.form['pwd_log']
+   id_log = request.form.get('id_log', False)
+   pwd_log = request.form.get('pwd_log', False)
 
    id = db.user.find_one({'id':id_log})
    pwd = db.user.find_one({'pwd':pwd_log})
 
-
    if(id and pwd):
       print("success")
-      #redirect(url_for('webstagram'))
+      @after_this_request
+      def add_no_cache_header(response):
+          response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+          response.headers['Pragma'] = 'no-cache'
+          response.headers['Expires'] = '0'
+          return response
+      #return redirect('/webstagram')
       return jsonify({'msg':'로그인 성공!'})
    #다른 페이지로 redirect
       
@@ -70,7 +127,7 @@ def profile_post():
 @app.route('/profile', methods=["GET"])
 def profile_get():
    all_profiles = list(db.profiles.find({},{'_id':False}))
-   my_id = list(db.user.find({},{'_id':False}))
+   
    return jsonify({'result':all_profiles})
 
 if __name__ == '__main__':
