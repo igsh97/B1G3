@@ -6,19 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
+
 
     <title>팀원소개록</title>
-    
+
     <script>
         $(document).ready(function () {
             show_login();
         });
 
         function show_login() {
-            
+
             const signInBtn = document.getElementById("signIn");
             const signUpBtn = document.getElementById("signUp");
             const fistForm = document.getElementById("form1");
@@ -36,11 +36,11 @@
             //fistForm.addEventListener("submit", (e) => e.preventDefault());
             //secondForm.addEventListener("submit", (e) => e.preventDefault());
         }
-        
-        function sign_up(){
+
+        function sign_up() {
             let id = $('#id').val()
             let pwd = $('#pw').val()
-            
+
             let formData = new FormData();
 
             formData.append("id_give", id);
@@ -52,7 +52,7 @@
             window.location.reload();
         }
 
-        function sign_in(){
+        async function sign_in() {
             let input_id = $('#inputID').val()
             let input_pwd = $('#inputPW').val()
 
@@ -61,19 +61,21 @@
             formData.append("id_log", input_id);
             formData.append("pwd_log", input_pwd);
 
-            fetch('/signIn', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
-                if(data['msg']=="로그인 성공!"){
-                    window.location.href='http://localhost:5001/webstagram'
+            try {
+                const response = await fetch('/signIn', { method: "POST", body: formData });
+                const data = await response.json();
+
+                if (data['msg'] === "로그인 성공!") {
+                    window.location.href = 'http://localhost:5001/webstagram';
+                } else {
+                    alert(data['msg']);
                 }
-                else{
-                    window.location.reload()
-                }
-                    
-                alert(data['msg']);
-                
-            });
-            window.location.reload()
-            
+            } catch (error) {
+                console.error('Error:', error);
+            }
+
+            //window.location.reload()
+
         }
 
     </script>
@@ -83,22 +85,23 @@
     <div class="container right-panel-active">
         <!-- Sign Up -->
         <div class="container__form container--signup">
+            <!-- 자기 자신한테 데이터 전송 -->
             <form action="#" class="form" id="form1">
                 <h2 class="form__title">Sign Up</h2>
-                <input type="text" placeholder="User" class="input" id="id"/>
+                <input type="text" placeholder="User" class="input" id="id" />
                 <!-- <input type="email" placeholder="Email" class="input" id="email"/> -->
-                <input type="password" placeholder="Password" class="input" id="pw"/>
+                <input type="password" placeholder="Password" class="input" id="pw" />
                 <button onclick="sign_up()" class="btn">회원가입</button>
             </form>
         </div>
 
         <!-- Sign In -->
         <div class="container__form container--signin">
-            <form action="#" class="form" id="form2">
+            <form action="/signIn" class="form" id="form2">
                 <h2 class="form__title">Sign In</h2>
-                <input type="text" placeholder="User" class="input" id="inputID"/>
-                <input type="password" placeholder="Password" class="input" id="inputPW"/>
-                
+                <input type="text" placeholder="User" class="input" id="inputID" />
+                <input type="password" placeholder="Password" class="input" id="inputPW" />
+
                 <button onclick="sign_in()" class="btn">로그인</button>
             </form>
         </div>

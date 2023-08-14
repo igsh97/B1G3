@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="{{ url_for('static', filename='profile1.css') }}" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>이혜리</title>
+    <style>
+        .form-floating {
+            font-family: 'Noto Serif KR', serif;
+            font-family: 'Roboto Mono', monospace;
+            margin-bottom: 4px;
+            border-radius: 15px;
+        }
+
+        .mypost {
+            margin: 20px 30px 20px 100px;
+
+            box-shadow: 0px 0px 3px 0px black;
+            padding: 10px;
+            background-color: transparent;
+
+            font-family: 'Noto Serif KR', serif;
+            font-family: 'Roboto Mono', monospace;
+
+            border-radius: 15px;
+            border-color: white;
+            border-style: outset;
+        }
+
+        /* .mypost>button {
+            margin-top: 0px;
+        } */
+    </style>
+    <script>
+        $(document).ready(function () {
+            show_comment();
+        });
+        function save_comment() {
+            let name = $('#name').val()
+            let comment = $('#comment').val()
+            //formData 객체 생성 전 받아놔야 함, formData 이후에 받으면 데이터가 제대로 저장 x
+            let formData = new FormData();
+
+            formData.append("name_give", name);
+            formData.append("comment_give", comment);
+
+            fetch('/comment', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+                alert(data['msg']);
+            });
+            window.location.reload()
+        }
+        function show_comment() {
+            fetch('/comment').then((res) => res.json()).then((data) => {
+                let rows = data['result']
+
+                $('#comment-list').empty()
+                rows.forEach((a) => {
+                    let name = a['name']
+                    let comment = a['comment']
+
+                    let temp_html = `<div class="mypost" style="width: 420px; height: 120px;" id="${comment}_post">
+                                        <div class="form-floating">
+                                            <a style="color: white;" type="text" class="ex-comment">
+                                                ${comment}
+                                            </a>
+                                        </div>
+                                        <div class="form-floating">
+                                            <a style="color: white;" type="text" class="ex-nick">
+                                                ㅡ ${name}
+                                            </a>
+                                        </div>
+                                        <div class="button-container">
+                                            <button style="color: white;" onclick="rewrite_comment(${name})" type="button" class="comment-btn1" id="${name}_re" value=${comment}>
+                                                rewrite
+                                            </button>
+                                            <button style="color: white;" onclick="delete_comment(${name})" type="button" class="comment-btn2" id="${name}" value="${comment}">
+                                                delete
+                                            </button>
+                                        </div>
+                                    </div>`
+
+                    $('#comment-list').append(temp_html)
+                })
+            })
+        }
+
+        function delete_comment(name) {
+
+            let give_comment = name.value
+            console.log(give_comment)
+
+            let formData = new FormData();
+
+            formData.append("give_comment", give_comment);
+
+            fetch('/delete', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+                alert(data['msg'])
+            });
+            window.location.reload()
+        }
+        function rewrite_comment(name) {
+
+            let give_comment = name.value
+            console.log(give_comment)
+
+            let formData = new FormData();
+
+            formData.append("re_comment", give_comment);
+
+            $('#' + give_comment + '_post').hide();
+
+            let temp_html = `<div class="mypost" style="width: 420px; height: 120px;" id="update-post">
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="new-comment"
+                                        style="width: 400px; height: 45px; border-radius: 10px"></textarea>
+                                </div>
+                                <button style="color: white;" type="button" class="btn" id="update">
+                                    update
+                                </button>
+                            </div>`
+            $('#comment-list').append(temp_html)
+
+            let updateBtn = document.getElementById("update");
+
+            updateBtn.addEventListener("click", () => {
+
+                let new_comment = $('#new-comment').val()
+                $('#update-post').remove()
+
+                formData.append("comment_rewrite", new_comment);
+                console.log(new_comment)
+
+                fetch('/rewrite', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+                    alert(data['msg']);
+                    console.log(data['msg'])
+                    //show_comment();
+                    window.location.reload()
+                });
+
+            });
+            //window.location.reload()
+        }
+    </script>
+</head>
+
+<body>
+    <div>
+        <h1 style="color: white;">Hyelee Lee</h1>
+        <hr align="left" width=98% color="white">
+        <div class="icon1">
+            <!--여기에 아이콘추가!-->
+            <img style="height: 35px;width: 35px; object-fit: contain"
+                src="data:image/jpeg;base64,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">
+        </div>
+        <div class="icon">
+            <img style="height: 40px;width: 40px; object-fit: contain"
+                src="https://icon-library.com/images/github-icon-white/github-icon-white-6.jpg"
+                onclick="location.href='https://github.com/hyeleenotharry';">
+        </div>
+        <div class="icon">
+            <img style="height: 40px;width: 40px; object-fit: contain"
+                src="data:image/jpeg;base64,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">
+        </div>
+        <div class="profile_img">
+            <img style="height: 240px;width: 220px; object-fit: contain"
+                src="https://images6.fanpop.com/image/photos/40600000/Water-and-Flowers-aesthetic-40635010-540-456.jpg">
+            <div>
+                <h2 class="about" style="color: white;">About Me</h2>
+                <h3 class="about1" style="color: rgb(201, 201, 201);">Something Cool</h3>
+                <h4 class="about2" style="color: rgb(255, 255, 255);">Easiest to make</h4>
+            </div>
+            <div style="margin-left: 300px;">
+                <h2 class="about" style="color: white;">Projects</h2>
+                <ul class="menu align-center expanded text-center SMN_effect-2" id="menu-pro"
+                    style="list-style-type: none;">
+                    <li><a href="">Database</a></li>
+                    <li><a href="">Algorithm</a></li>
+                    <li><a href="">Demo</a></li>
+                    <li><a href="">Web</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="skill" style="color: white;">What Skill I Have</div>
+    <div class="skill-container">
+        <a><span class="tag tag-js tag-lg">#javascript</span></a>
+        <a><span class="tag tag-js tag-lg">#c</span></a>
+        <a><span class="tag tag-js tag-lg">#java</span></a>
+        <a><span class="tag tag-js tag-lg">#python</span></a>
+        <a><span class="tag tag-js tag-lg">#flask</span></a>
+        <a><span class="tag tag-js tag-lg">#html</span></a>
+        <a><span class="tag tag-js tag-lg">#CSS</span></a>
+        <a><span class="tag tag-js tag-lg">#node.js</span></a>
+    </div>
+    <div class="bottom">
+        <div>
+            <h3 class="ex" style="color: rgb(201, 201, 201);">Experience</h3>
+            <hr align="left" width=100%>
+            <div class="ex" style="color: white;">
+                Ewha Woman University
+            </div>
+            <hr align="left" width=100%>
+        </div>
+        <div>
+            <div class="mypost" style="width: 420px; height: 120px;">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="name" placeholder="nickname" style="width: 400px; height: 20px; border-radius: 10px; font-family: 'Noto Serif KR', serif;
+                            font-family: 'Roboto Mono', monospace;" />
+                </div>
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+                        style="width: 400px; height: 45px; border-radius: 10px"></textarea>
+                </div>
+                <button style="color: white;" onclick="save_comment()" type="button" class="btn">
+                    share
+                </button>
+            </div>
+            <div id="comment-list">
+                <div class="mypost" style="width: 420px; height: 120px;">
+                    <div class="form-floating">
+                        <a style="color: white;" type="text" class="ex-comment">
+                            beautiful!
+                        </a>
+                    </div>
+                    <div class="form-floating">
+                        <a style="color: white;" type="text" class="ex-nick">
+                            ㅡ abc
+                        </a>
+                    </div>
+                    <div class="button-container">
+                        <button style="color: white;" onclick="save_comment()" type="button" class="comment-btn1">
+                            rewrite
+                        </button>
+                        <button style="color: white;" onclick="save_comment()" type="button" class="comment-btn2">
+                            delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

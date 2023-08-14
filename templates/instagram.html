@@ -21,6 +21,7 @@
         $(document).ready(function () {
             listing();
         });
+        
 
         function posting(){
             let name=$('#name').val()
@@ -42,6 +43,11 @@
                 alert(data['msg']);
             });
             window.location.reload();
+        }
+
+        function showPopUp(){
+            window.open('/hyelee', 'width=800, height=600'); 
+            return false;
         }
 
         function listing(){
@@ -72,7 +78,7 @@
                                     </div>`
                     $('#recommends').append(pro_html)
 
-                    let temp_html=`<div class="border feed_box">
+                    let temp_html=`<div class="border feed_box" onClick="showPopUp()"">
                                         <!-- 피드이름-->
                                         <div class="feed_name">
                                             <div class="profile_box">
@@ -177,19 +183,19 @@
     }
     @media (max-width: 1280px) {
         .right_body {
-            display: none; /* Hide the right column when screen width is below 660px */
+            display: none; /*1200px 이하로 화면이 작아지면 숨기기 */
         }
     }
-    /* 문제 부분 */
+    
     .left_body {
         position: relative;
-        left: 0; /* Reset the left position */
-        width: 600px; /* Fixed width */
-        padding: 0 0px; /* Add smaller padding for spacing */
+        left: 0; 
+        width: 600px; 
+        padding: 0 0px; 
         display: flex;
         flex-direction: column;
-        align-items: center; /* Center the content horizontally */
-        margin: 0 auto; /* Center the element horizontally */
+        align-items: center; 
+        margin: 0 auto; 
     }
 
 
@@ -414,7 +420,7 @@
             </div>
             <!-- 고정된 부분 -->
             <div class="feeds" id="feed-boxes">
-                <div class="border feed_box">
+                <div class="border feed_box" onclick="window.open('http://localhost:5001/webstagram','feed','width=430,height=500,location=no,status=no,scrollbars=yes');">
                     <!-- 피드이름-->
                     <div class="feed_name">
                         <div class="profile_box">
