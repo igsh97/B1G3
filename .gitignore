@@ -295,6 +295,10 @@ pyrightconfig.json
 ### venv ###
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
+<<<<<<< HEAD
+=======
+.Python
+>>>>>>> 746236ebe7929c5401b3d482585ea26b7f9d7d6f
 [Bb]in
 [Ii]nclude
 [Ll]ib
@@ -302,6 +306,7 @@ pyrightconfig.json
 [Ll]ocal
 [Ss]cripts
 pyvenv.cfg
+<<<<<<< HEAD
 pip-selfcheck.json
 
 ### VisualStudioCode ###
@@ -324,3 +329,9 @@ pip-selfcheck.json
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,python,venv,flask,visualstudiocode
+=======
+.venv
+pip-selfcheck.json
+
+# End of https://www.toptal.com/developers/gitignore/api/venv
+>>>>>>> 746236ebe7929c5401b3d482585ea26b7f9d7d6f
